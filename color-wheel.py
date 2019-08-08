@@ -17,13 +17,12 @@ screen.fill(white)
 
 wedges = primary_count * (secondary_count + 1)
 angle = (360 / wedges)
-start_angle = angle / 2
+start_angle = 0 - angle / 2
 
-pygame.draw.circle(screen, black, center, inner_radus, 1)
-bounds = pygame.draw.circle(screen, black, center, outer_radus, 1)
+#pygame.draw.circle(screen, black, center, inner_radus, 1)
+#bounds = pygame.draw.circle(screen, black, center, outer_radus, 1)
 
-print(bounds.x, bounds.y, bounds.height, bounds.width, bounds.center)
-
+#print(bounds.x, bounds.y, bounds.height, bounds.width, bounds.center)
 
 def draw_line_at_angle(surface, angle, center, radus, inner_radus=0):
 	radians = math.radians(angle)
@@ -46,14 +45,21 @@ def point_off_angle(center, radius, angle):
 	y = -(radius * math.cos(radians)) + center[1]
 	return int(x), int(y)
 
+def draw_wedge(surface, inner_radius, outer_radius, start_angle, angle, center, border_color=black, fill_color=white):
+	p1 = point_off_angle(center, outer_radius, start_angle)
+	p2 = point_off_angle(center, inner_radius, start_angle)
+	p3 = point_off_angle(center, inner_radius, start_angle+angle)
+	p4 = point_off_angle(center, outer_radius, start_angle+angle)
+	points = (p1, p2, p3, p4)
+	pygame.draw.polygon(surface, fill_color, points)
+	pygame.draw.polygon(surface, border_color, points, 1)
 
 
-for i, a in enumerate(range(int(start_angle), 90, int(angle))):
-	draw_line_at_angle(screen, a, center, outer_radus, inner_radus)
+for i, a in enumerate(range(int(start_angle), 360, int(angle))):
 	if i%(secondary_count + 1) == 0:
-		an = pygame.draw.arc(screen, gray, bounds, a-angle, a, 50)
-		print(an.x, an.y, an.width, an.height)
-		pygame.draw.circle(screen, black, point_off_angle(center, 150, a-start_angle), 20)
+		draw_wedge(screen, inner_radus, outer_radus, a, angle, center, black, gray)
+	else:
+		draw_wedge(screen, inner_radus, outer_radus, a, angle, center, black, white)
 
 pygame.display.flip()
 

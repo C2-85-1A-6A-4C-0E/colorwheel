@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="C:\Users\AJ\PycharmProjects\color-selector\venv"
+VIRTUAL_ENV="C:\Users\AJ\PycharmProjects\colorwheel\venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
