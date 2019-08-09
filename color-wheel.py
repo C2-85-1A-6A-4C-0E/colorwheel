@@ -4,17 +4,17 @@ size = height, width = 600, 600
 black = (0,0,0)
 white = (255,255,255)
 gray = grey = (127,127,127)
-secondary_count = 4
+secondary_count = 10
 center = center_x, center_y = [i//2 for i in size]
 inner_radus = 100
 outer_radus = 250
 
-primaries = red, green, blue = (255,0,0), (0,255,0), (0,0,255)
-nxts = green, blue, red
+red, green, blue = (255,0,0), (0,255,0), (0,0,255)
 magenta, cyan, yellow = (255,0,255), (0,255,255), (255,255,0)
 
-primaries = red, yellow, blue
-nxts = yellow, blue, red
+primaries = yellow, blue, red
+
+nxts = tuple( (*primaries[1:], primaries[0]))
 
 pygame.init()
 screen = pygame.display.set_mode(size)
