@@ -1,23 +1,25 @@
-import pygame, pygame.locals as locals, sys, math
+import pygame, pygame.locals as locals, sys, math, color_mixing, itertools
 
 size = height, width = 600, 600
 black = (0,0,0)
 white = (255,255,255)
 gray = grey = (127,127,127)
-primary_count = 3
-secondary_count = 3
+secondary_count = 4
 center = center_x, center_y = [i//2 for i in size]
 inner_radus = 100
 outer_radus = 250
 
+primaries = red, green, blue = (255,0,0), (0,255,0), (0,0,255)
+nxts = green, blue, red
+magenta, cyan, yellow = (255,0,255), (0,255,255), (255,255,0)
+
+primaries = red, yellow, blue
+nxts = yellow, blue, red
 
 pygame.init()
 screen = pygame.display.set_mode(size)
 screen.fill(white)
 
-wedges = primary_count * (secondary_count + 1)
-angle = (360 / wedges)
-start_angle = 0 - angle / 2
 
 #pygame.draw.circle(screen, black, center, inner_radus, 1)
 #bounds = pygame.draw.circle(screen, black, center, outer_radus, 1)
@@ -54,12 +56,18 @@ def draw_wedge(surface, inner_radius, outer_radius, start_angle, angle, center, 
 	pygame.draw.polygon(surface, fill_color, points)
 	pygame.draw.polygon(surface, border_color, points, 1)
 
+wedges = len(primaries) * secondary_count
+angle = 360 / wedges
+working_angle = 0 - (angle / 2)
 
-for i, a in enumerate(range(int(start_angle), 360, int(angle))):
-	if i%(secondary_count + 1) == 0:
-		draw_wedge(screen, inner_radus, outer_radus, a, angle, center, black, gray)
-	else:
-		draw_wedge(screen, inner_radus, outer_radus, a, angle, center, black, white)
+for pri, nxt in zip(primaries, nxts):
+	weight = 0
+	for wedge in range(secondary_count):
+		print(weight)
+		color = color_mixing.add_colors(nxt, pri, weight)
+		weight += 1/secondary_count
+		draw_wedge(screen, inner_radus, outer_radus, working_angle, angle, center, black, color)
+		working_angle += angle
 
 pygame.display.flip()
 
